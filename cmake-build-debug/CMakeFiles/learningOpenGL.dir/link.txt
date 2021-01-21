@@ -1,0 +1,1 @@
+/usr/bin/g++ -g CMakeFiles/learningOpenGL.dir/main.cpp.o -o learningOpenGL  -lOpenGL lib/glfw-3.3.2/src/libglfw3.a /usr/lib/librt.so -lm -ldl /usr/lib/libX11.so -lpthread 
