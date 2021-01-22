@@ -1,22 +1,30 @@
-cmake_minimum_required(VERSION 3.19)
-project(learningOpenGL)
+cmake_minimum_required( VERSION 3.1 )
 
-set(CMAKE_CXX_STANDARD 14)
+project( GLFW-CMake-starter )
 
-add_executable(learningOpenGL main.cpp)
+find_package( OpenGL REQUIRED )
 
+include_directories( ${OPENGL_INCLUDE_DIRS} )
 
-#########################################################
-# Find OpenGL
-#########################################################
+set( GLFW_BUILD_DOCS OFF CACHE BOOL  "GLFW lib only" )
+set( GLFW_INSTALL OFF CACHE BOOL  "GLFW lib only" )
 
-find_package(OpenGL REQUIRED)
+add_subdirectory( glfw )
 
-#########################################################
-# Include Subprojects
-#########################################################
-add_subdirectory("${PROJECT_SOURCE_DIR}/lib/glfw-3.3.2")
-include_directories("${PROJECT_SOURCE_DIR}/lib/glfw-3.3.2/include")
+if( MSVC )
+    SET( CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /ENTRY:mainCRTStartup" )
+endif()
 
-target_link_libraries(learningOpenGL OpenGL)
-target_link_libraries(learningOpenGL glfw)
+set( GLFW-CMAKE-STARTER-SRC
+     main.cpp
+     )
+     
+add_executable( GLFW-CMake-starter WIN32 ${GLFW-CMAKE-STARTER-SRC} )
+target_link_libraries( GLFW-CMake-starter ${OPENGL_LIBRARIES} glfw )
+if( MSVC )
+    if(${CMAKE_VERSION} VERSION_LESS "3.6.0") 
+        message( "\n\t[ WARNING ]\n\n\tCMake version lower than 3.6.\n\n\t - Please update CMake and rerun; OR\n\t - Manually set 'GLFW-CMake-starter' as StartUp Project in Visual Studio.\n" )
+    else()
+        set_property( DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT GLFW-CMake-starter )
+    endif()
+endif()
